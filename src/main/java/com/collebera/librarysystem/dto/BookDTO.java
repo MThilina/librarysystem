@@ -14,6 +14,5 @@ public class BookDTO {
     @NotBlank @NotEmpty @NotNull
     private String title;
     @NotBlank @NotEmpty @NotNull
-    @Email
     private String author;
 }
