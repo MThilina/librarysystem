@@ -18,6 +18,7 @@ ENV DATASOURCE_DIALECT=org.hibernate.dialect.H2Dialect
 
 # Enable H2 console
 ENV H2_CONSOLE=true
+ENV ACTIVE_PROFILE=local
 
 # Command to run the JAR file
 ENTRYPOINT ["java", "-jar", "library-system"]
