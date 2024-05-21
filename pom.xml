@@ -20,7 +20,6 @@
 		<maven.compiler.target>17</maven.compiler.target>
 		<mapstruct.version>1.5.3.Final</mapstruct.version>
 		<spring.doc.version>2.0.4</spring.doc.version>
-		<junit.testing>5.9.1</junit.testing>
 		<mokinto.testing>3.12.4</mokinto.testing>
 	</properties>
 
@@ -78,28 +77,13 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-			<version>${junit.testing}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
-			<version>${junit.testing}</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
-			<version>${mokinto.testing}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-junit-jupiter</artifactId>
-			<version>${mokinto.testing}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
