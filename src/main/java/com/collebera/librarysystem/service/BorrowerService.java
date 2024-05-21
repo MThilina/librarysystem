@@ -2,6 +2,8 @@ package com.collebera.librarysystem.service;
 
 import com.collebera.librarysystem.dto.BookDTO;
 import com.collebera.librarysystem.dto.BorrowerDTO;
+import com.collebera.librarysystem.exception.BadRequestException;
+import com.collebera.librarysystem.exception.NotfoundException;
 import com.collebera.librarysystem.mappers.BookMapper;
 import com.collebera.librarysystem.mappers.BorrowerMapper;
 import com.collebera.librarysystem.model.Book;
@@ -31,12 +33,12 @@ public class BorrowerService {
 
     public BookDTO borrowBook(Long borrowerId, Long bookId) {
         Borrower borrower = borrowerRepository.findById(borrowerId)
-                .orElseThrow(() -> new RuntimeException("Borrower not found"));
+                .orElseThrow(() -> new NotfoundException("Borrower not found"));
         Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new RuntimeException("Book not found"));
+                .orElseThrow(() -> new NotfoundException("Book not found"));
 
         if (book.isBorrowed()) {
-            throw new RuntimeException("Book is already borrowed");
+            throw new BadRequestException("Book is already borrowed");
         }
 
         book.setBorrowed(true);
@@ -46,12 +48,12 @@ public class BorrowerService {
 
     public BookDTO returnBook(Long borrowerId, Long bookId) {
         Borrower borrower = borrowerRepository.findById(borrowerId)
-                .orElseThrow(() -> new RuntimeException("Borrower not found"));
+                .orElseThrow(() -> new NotfoundException("Borrower not found"));
         Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new RuntimeException("Book not found"));
+                .orElseThrow(() -> new NotfoundException("Book not found"));
 
         if (!book.isBorrowed()) {
-            throw new RuntimeException("Book was not borrowed");
+            throw new BadRequestException("Book was not borrowed");
         }
 
         book.setBorrowed(false);
