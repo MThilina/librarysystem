@@ -37,7 +37,7 @@ public class BorrowerController {
             @ApiResponse(responseCode = "400", description = "Book already borrowed"),
             @ApiResponse(responseCode = "404", description = "Book or Borrower details not found")
     })
-    @PostMapping("/{borrowerId}/books-borrow/{bookId}")
+    @PatchMapping("/{borrowerId}/books-borrow/{bookId}")
     public ResponseEntity<BookDTO> borrowBook(@PathVariable Long borrowerId, @PathVariable Long bookId) {
         BookDTO book = borrowerService.borrowBook(borrowerId, bookId);
         return new ResponseEntity<>(book, HttpStatus.OK);
@@ -48,7 +48,7 @@ public class BorrowerController {
             @ApiResponse(responseCode = "200", description = "Book returned successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid borrower or book ID")
     })
-    @PostMapping("/{borrowerId}/books-return/{bookId}")
+    @PatchMapping("/{borrowerId}/books-return/{bookId}")
     public ResponseEntity<BookDTO> returnBook(@PathVariable Long borrowerId, @PathVariable Long bookId) {
         BookDTO book = borrowerService.returnBook(borrowerId, bookId);
         return new ResponseEntity<>(book, HttpStatus.OK);
