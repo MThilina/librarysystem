@@ -21,5 +21,5 @@ public class Book {
     private String title;
     private String author;
 
-    private boolean borrowed;
+    private boolean borrowed=false;
 }
