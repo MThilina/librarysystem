@@ -1,0 +1,160 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > BorrowerController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.collebera.librarysystem.controller</a>
+</div>
+
+<h1>Coverage Summary for Class: BorrowerController (com.collebera.librarysystem.controller)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BorrowerController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.collebera.librarysystem.controller;
+&nbsp;
+&nbsp;import com.collebera.librarysystem.dto.BookDTO;
+&nbsp;import com.collebera.librarysystem.dto.BorrowerDTO;
+&nbsp;import com.collebera.librarysystem.service.BorrowerService;
+&nbsp;import io.swagger.v3.oas.annotations.Operation;
+&nbsp;import io.swagger.v3.oas.annotations.responses.ApiResponse;
+&nbsp;import io.swagger.v3.oas.annotations.responses.ApiResponses;
+&nbsp;import jakarta.validation.Valid;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.web.bind.annotation.*;
+&nbsp;
+&nbsp;@RestController
+&nbsp;@RequestMapping(&quot;/api/library/borrowers&quot;)
+<b class="fc">&nbsp;public class BorrowerController {</b>
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private BorrowerService borrowerService;
+&nbsp;
+&nbsp;    @Operation(summary = &quot;Register a new borrower&quot;)
+&nbsp;    @ApiResponses(value = {
+&nbsp;            @ApiResponse(responseCode = &quot;201&quot;, description = &quot;Borrower registered successfully&quot;),
+&nbsp;            @ApiResponse(responseCode = &quot;400&quot;, description = &quot;Invalid input data&quot;)
+&nbsp;    })
+&nbsp;    @PostMapping
+&nbsp;    public ResponseEntity&lt;BorrowerDTO&gt; registerBorrower(@Valid @RequestBody BorrowerDTO borrowerDTO) {
+<b class="fc">&nbsp;        BorrowerDTO createdBorrower = borrowerService.registerBorrower(borrowerDTO);</b>
+<b class="fc">&nbsp;        return new ResponseEntity&lt;&gt;(createdBorrower, HttpStatus.CREATED);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Operation(summary = &quot;Borrow a book&quot;)
+&nbsp;    @ApiResponses(value = {
+&nbsp;            @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Book borrowed successfully&quot;),
+&nbsp;            @ApiResponse(responseCode = &quot;400&quot;, description = &quot;Invalid borrower or book ID&quot;),
+&nbsp;            @ApiResponse(responseCode = &quot;400&quot;, description = &quot;Book already borrowed&quot;),
+&nbsp;            @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Book or Borrower details not found&quot;)
+&nbsp;    })
+&nbsp;    @PatchMapping(&quot;/{borrowerId}/books-borrow/{bookId}&quot;)
+&nbsp;    public ResponseEntity&lt;BookDTO&gt; borrowBook(@PathVariable Long borrowerId, @PathVariable Long bookId) {
+<b class="fc">&nbsp;        BookDTO book = borrowerService.borrowBook(borrowerId, bookId);</b>
+<b class="fc">&nbsp;        return new ResponseEntity&lt;&gt;(book, HttpStatus.OK);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Operation(summary = &quot;Return a borrowed book&quot;)
+&nbsp;    @ApiResponses(value = {
+&nbsp;            @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Book returned successfully&quot;),
+&nbsp;            @ApiResponse(responseCode = &quot;400&quot;, description = &quot;Invalid borrower or book ID&quot;)
+&nbsp;    })
+&nbsp;    @PatchMapping(&quot;/{borrowerId}/books-return/{bookId}&quot;)
+&nbsp;    public ResponseEntity&lt;BookDTO&gt; returnBook(@PathVariable Long borrowerId, @PathVariable Long bookId) {
+<b class="fc">&nbsp;        BookDTO book = borrowerService.returnBook(borrowerId, bookId);</b>
+<b class="fc">&nbsp;        return new ResponseEntity&lt;&gt;(book, HttpStatus.OK);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-05-21 18:43</div>
+</div>
+</body>
+</html>

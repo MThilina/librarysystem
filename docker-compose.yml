@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  library-system:
+    image: library-system
+    build:
+      context: .
+    ports:
+      - "8080:8080"
