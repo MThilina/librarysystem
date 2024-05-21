@@ -1,6 +1,8 @@
 package com.collebera.librarysystem.controller;
 
+import com.collebera.librarysystem.dto.BookDTO;
 import com.collebera.librarysystem.dto.BorrowerDTO;
+import com.collebera.librarysystem.exception.NotfoundException;
 import com.collebera.librarysystem.service.BorrowerService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,7 +51,7 @@ class BorrowerControllerTest {
         mockMvc.perform(post("/api/library/borrowers")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(borrowerDTO)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", notNullValue()))
                 .andExpect(jsonPath("$.name", is("John Doe")))
@@ -65,8 +67,8 @@ class BorrowerControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidBorrowerDTO)))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.errors", hasSize(greaterThan(0))));
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON));
+
     }
 
     @Test
@@ -74,14 +76,22 @@ class BorrowerControllerTest {
         Long borrowerId = 1L;
         Long bookId = 1L;
 
-        String bookJson = "{ \"id\": 1, \"isbn\": \"1234567890\", \"title\": \"Test Book\", \"author\": \"Author\", \"borrowed\": true }";
+        BookDTO returnedBookDTO = new BookDTO();
+        returnedBookDTO.setId(1L);
+        returnedBookDTO.setIsbn("1234567890");
+        returnedBookDTO.setTitle("Test Book");
+        returnedBookDTO.setAuthor("Author");
 
-        mockMvc.perform(put("/api/library/borrowers/{borrowerId}/borrow/{bookId}", borrowerId, bookId)
+        Mockito.when(borrowerService.borrowBook(borrowerId,bookId)).thenReturn(returnedBookDTO);
+
+        mockMvc.perform(patch("/api/library/borrowers/{borrowerId}/books-borrow/{bookId}", borrowerId, bookId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.borrowed", is(true)));
+                .andExpect(jsonPath("$.id", notNullValue()))
+                .andExpect(jsonPath("$.isbn", is("1234567890")))
+                .andExpect(jsonPath("$.title", is("Test Book")))
+                .andExpect(jsonPath("$.author", is("Author")));
     }
 
     @Test
@@ -89,7 +99,9 @@ class BorrowerControllerTest {
         Long borrowerId = 999L;
         Long bookId = 999L;
 
-        mockMvc.perform(put("/api/library/borrowers/{borrowerId}/borrow/{bookId}", borrowerId, bookId)
+        Mockito.when(borrowerService.borrowBook(borrowerId,bookId)).thenThrow(new NotfoundException("Borrower not found"));
+
+        mockMvc.perform(patch("/api/library/borrowers/{borrowerId}/books-borrow/{bookId}", borrowerId, bookId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -101,14 +113,22 @@ class BorrowerControllerTest {
         Long borrowerId = 1L;
         Long bookId = 1L;
 
-        String bookJson = "{ \"id\": 1, \"isbn\": \"1234567890\", \"title\": \"Test Book\", \"author\": \"Author\", \"borrowed\": false }";
+        BookDTO returnedBookDTO = new BookDTO();
+        returnedBookDTO.setId(1L);
+        returnedBookDTO.setIsbn("1234567890");
+        returnedBookDTO.setTitle("Test Book");
+        returnedBookDTO.setAuthor("Author");
 
-        mockMvc.perform(put("/api/library/borrowers/{borrowerId}/return/{bookId}", borrowerId, bookId)
+        Mockito.when(borrowerService.returnBook(borrowerId,bookId)).thenReturn(returnedBookDTO);
+
+        mockMvc.perform(patch("/api/library/borrowers/{borrowerId}/books-return/{bookId}", borrowerId, bookId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.borrowed", is(false)));
+                .andExpect(jsonPath("$.id", notNullValue()))
+                .andExpect(jsonPath("$.isbn", is("1234567890")))
+                .andExpect(jsonPath("$.title", is("Test Book")))
+                .andExpect(jsonPath("$.author", is("Author")));
     }
 
     @Test
@@ -116,7 +136,9 @@ class BorrowerControllerTest {
         Long borrowerId = 999L;
         Long bookId = 999L;
 
-        mockMvc.perform(put("/api/library/borrowers/{borrowerId}/return/{bookId}", borrowerId, bookId)
+        Mockito.when(borrowerService.returnBook(borrowerId,bookId)).thenThrow(new NotfoundException("Borrower not found"));
+
+        mockMvc.perform(patch("/api/library/borrowers/{borrowerId}/books-return/{bookId}", borrowerId, bookId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
