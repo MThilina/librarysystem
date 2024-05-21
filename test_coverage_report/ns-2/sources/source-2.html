@@ -1,0 +1,179 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > BorrowerService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.collebera.librarysystem.service</a>
+</div>
+
+<h1>Coverage Summary for Class: BorrowerService (com.collebera.librarysystem.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BorrowerService</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (3/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    95.8%
+  </span>
+  <span class="absValue">
+    (23/24)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.collebera.librarysystem.service;
+&nbsp;
+&nbsp;import com.collebera.librarysystem.dto.BookDTO;
+&nbsp;import com.collebera.librarysystem.dto.BorrowerDTO;
+&nbsp;import com.collebera.librarysystem.exception.BadRequestException;
+&nbsp;import com.collebera.librarysystem.exception.NotfoundException;
+&nbsp;import com.collebera.librarysystem.mappers.BookMapper;
+&nbsp;import com.collebera.librarysystem.mappers.BorrowerMapper;
+&nbsp;import com.collebera.librarysystem.model.Book;
+&nbsp;import com.collebera.librarysystem.model.Borrower;
+&nbsp;import com.collebera.librarysystem.repository.BookRepository;
+&nbsp;import com.collebera.librarysystem.repository.BorrowerRepository;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;@Service
+&nbsp;public class BorrowerService {
+&nbsp;
+&nbsp;    private final BorrowerRepository borrowerRepository;
+&nbsp;    private final BookRepository bookRepository;
+&nbsp;
+&nbsp;    @Autowired
+<b class="fc">&nbsp;    public BorrowerService(BorrowerRepository borrowerRepository, BookRepository bookRepository) {</b>
+<b class="fc">&nbsp;        this.borrowerRepository = borrowerRepository;</b>
+<b class="fc">&nbsp;        this.bookRepository = bookRepository;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public BorrowerDTO registerBorrower(BorrowerDTO borrowerDTO) {
+<b class="fc">&nbsp;        Borrower borrower = BorrowerMapper.INSTANCE.toEntity(borrowerDTO);</b>
+<b class="fc">&nbsp;        borrower = borrowerRepository.save(borrower);</b>
+<b class="fc">&nbsp;        return BorrowerMapper.INSTANCE.toDTO(borrower);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public BookDTO borrowBook(Long borrowerId, Long bookId) {
+<b class="fc">&nbsp;        Borrower borrower = borrowerRepository.findById(borrowerId)</b>
+<b class="fc">&nbsp;                .orElseThrow(() -&gt; new NotfoundException(&quot;Borrower not found&quot;));</b>
+<b class="fc">&nbsp;        Book book = bookRepository.findById(bookId)</b>
+<b class="fc">&nbsp;                .orElseThrow(() -&gt; new NotfoundException(&quot;Book not found&quot;));</b>
+&nbsp;
+<b class="pc">&nbsp;        if (book.isBorrowed()) {</b>
+<b class="nc">&nbsp;            throw new BadRequestException(&quot;Book is already borrowed&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        book.setBorrowed(true);</b>
+<b class="fc">&nbsp;        bookRepository.save(book);</b>
+<b class="fc">&nbsp;        return BookMapper.INSTANCE.toDTO(book);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public BookDTO returnBook(Long borrowerId, Long bookId) {
+<b class="fc">&nbsp;        Borrower borrower = borrowerRepository.findById(borrowerId)</b>
+<b class="fc">&nbsp;                .orElseThrow(() -&gt; new NotfoundException(&quot;Borrower not found&quot;));</b>
+<b class="fc">&nbsp;        Book book = bookRepository.findById(bookId)</b>
+<b class="fc">&nbsp;                .orElseThrow(() -&gt; new NotfoundException(&quot;Book not found&quot;));</b>
+&nbsp;
+<b class="fc">&nbsp;        if (!book.isBorrowed()) {</b>
+<b class="fc">&nbsp;            throw new BadRequestException(&quot;Book was not borrowed&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        book.setBorrowed(false);</b>
+<b class="fc">&nbsp;        bookRepository.save(book);</b>
+<b class="fc">&nbsp;        return BookMapper.INSTANCE.toDTO(book);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-05-21 18:43</div>
+</div>
+</body>
+</html>
