@@ -153,7 +153,7 @@
 			</plugin>
 		</plugins>
 
-		<finalName>librarysystem</finalName>
+		<finalName>library-system</finalName>
 	</build>
 
 </project>
