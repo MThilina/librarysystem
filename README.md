@@ -13,6 +13,8 @@ A simple library system with RESTful APIs for managing borrowers and books, impl
 - [Testing](#testing)
 - [Deployment](#deployment)
 - [Contributing](#contributing)
+- [Special Notes](#special-notes-)
+
 
 
 ## Project Structure
@@ -127,5 +129,16 @@ docker-compose up --build
 docker-compose down
 ```
 
-## Contributing
+### Contributing
 Contributions are welcome! Please submit a pull request or open an issue to discuss what you would like to change.
+
+### Special Notes 
+
+- All the Docker related files (Dockerfile and the composer file ) located in the root directory
+
+- All the k8's related deployment files located in the deployment directory , there are
+  - deployment.yml 
+  - service.yml
+  
+- CI\CD pipeline written with GithHub Actions and related files (workflow) located at the .github/workflow location and the related file name is ci.yml
+- All the logging are handel by aspects 
